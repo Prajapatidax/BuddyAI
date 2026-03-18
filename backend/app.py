@@ -3,11 +3,13 @@ import sqlite3
 import uuid
 from datetime import datetime
 from functools import wraps
+from datetime import timedelta
 
 from PyPDF2 import PdfReader
 from docx import Document
 from dotenv import load_dotenv
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -17,10 +19,17 @@ import google.generativeai as genai
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "buddyai.db")
+DB_PATH = os.getenv("SQLITE_PATH", os.path.join(os.path.dirname(os.path.abspath(__file__)), "buddyai.db"))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 ALLOWED_EXTENSIONS = {"pdf", "docx"}
 MAX_DOCUMENT_CONTEXT_CHARS = 120_000
+
+
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def create_app():
@@ -30,11 +39,18 @@ def create_app():
         static_folder=os.path.join(BASE_DIR, "static"),
     )
 
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-change-me")
     app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
     app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    app.config["SESSION_COOKIE_SAMESITE"] = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+    app.config["SESSION_COOKIE_SECURE"] = env_bool("SESSION_COOKIE_SECURE", default=True)
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=int(os.getenv("SESSION_TTL_DAYS", "7")))
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     init_db()
     configure_gemini()
 
@@ -49,7 +65,7 @@ def configure_gemini():
 
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=10)
     cursor = conn.cursor()
     cursor.execute(
         """
@@ -67,7 +83,7 @@ def init_db():
 
 
 def db_execute(query, params=(), fetchone=False, fetchall=False):
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=10)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute(query, params)
@@ -147,6 +163,18 @@ def summarize_document(context_text):
 
 
 def register_routes(app):
+    @app.after_request
+    def add_security_headers(response):
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+        response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+        response.headers.setdefault("Cache-Control", "no-store")
+        return response
+
+    @app.route("/health")
+    def health():
+        return jsonify({"status": "ok"}), 200
+
     @app.route("/")
     def index():
         return render_template("index.html", is_logged_in="user_id" in session)
@@ -305,4 +333,6 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.getenv("PORT", "5000"))
+    debug = env_bool("FLASK_DEBUG", default=False)
+    app.run(host="0.0.0.0", port=port, debug=debug)
