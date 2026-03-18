@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body class="dashboard-body" data-user-id="{{ user.id }}" data-username="{{ user.username }}">
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <span class="logo-dot"></span>
+                <h2 class="sidebar-title">BuddyAI</h2>
+            </div>
+            <p class="sidebar-sub">Hi {{ user.username }}, ready to study smarter?</p>
+
+            <section>
+                <label id="drop-zone" class="upload-drop" for="file-input">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <strong>Upload PDF / DOCX</strong>
+                    <small>Drag and drop or click to browse</small>
+                </label>
+                <input id="file-input" type="file" accept=".pdf,.docx" hidden />
+                <button id="upload-btn" class="button button-primary" type="button" style="width:100%; margin-top:12px;">Upload & Analyze</button>
+                <div class="progress-track" id="upload-progress-track">
+                    <div class="progress-fill" id="upload-progress-fill"></div>
+                </div>
+                <p class="upload-meta" id="upload-status">No file selected</p>
+            </section>
+
+            <section class="history-section">
+                <h3>Chat History</h3>
+                <div id="history-list" class="history-list">
+                    <!-- Added Empty State Fallback handled by JS usually, but kept for clarity -->
+                </div>
+            </section>
+
+            <a class="button button-secondary" href="{{ url_for('logout') }}" style="width:100%;">Logout</a>
+        </aside>
+
+        <main class="chat-panel">
+            <header class="chat-topbar">
+                <div>
+                    <h1 class="chat-title">Workspace</h1>
+                    <p class="chat-subtitle" id="active-doc">Upload a file to start your contextual conversation.</p>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </header>
+
+            <section id="summary-card" class="summary-card hidden">
+                <h4>Document Summary</h4>
+                <p id="summary-text"></p>
+            </section>
+
+            <section id="chat-window" class="chat-window">
+                <!-- Welcome Screen & Demo Guide -->
+                <div id="welcome-screen" class="welcome-screen">
+                    <div class="welcome-header">
+                        <h2>Welcome to BuddyAI</h2>
+                        <p>BuddyAI is your smart academic assistant that helps you analyze documents, understand concepts, generate notes, and answer questions based on your uploaded files.</p>
+                    </div>
+                    
+                    <div class="how-to-guide">
+                        <h3>How to use BuddyAI</h3>
+                        <div class="steps-grid">
+                            <div class="step-card">
+                                <span class="step-num">1</span>
+                                <div>
+                                    <p>Login or Sign Up to access your dashboard.</p>
+                                </div>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">2</span>
+                                <div>
+                                    <p>Upload your PDF or Word file from the sidebar.</p>
+                                </div>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">3</span>
+                                <div>
+                                    <p>Wait for the AI to securely analyze your file.</p>
+                                </div>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">4</span>
+                                <div>
+                                    <p>Ask questions in chat to explore the content.</p>
+                                </div>
+                            </div>
+                            <div class="step-card" style="grid-column: 1 / -1; align-items: center;">
+                                <span class="step-num">5</span>
+                                <div>
+                                    <p>Get instant answers, smart summaries, and structured notes to study efficiently.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="empty-state-msg">
+                        Upload a file to start using BuddyAI
+                    </div>
+                </div>
+                <!-- Chat messages will dynamically populate here -->
+            </section>
+
+            <footer class="chat-composer">
+                <div class="quick-actions">
+                    <button class="quick-btn" id="explain-simple" type="button">Explain Simply</button>
+                    <button class="quick-btn" id="generate-notes" type="button">Generate Notes</button>
+                </div>
+                <form id="chat-form">
+                    <div class="composer-row">
+                        <input id="chat-input" class="composer-input" type="text" placeholder="Ask a question about your document (e.g., 'Summarize chapter 1')..." autocomplete="off" required disabled />
+                        <button class="button button-primary" type="submit" id="send-btn" disabled>Send</button>
+                    </div>
+                </form>
+                <p class="composer-tip" id="composer-tip">Secure, academic-focused AI processing. Upload a file to start asking questions.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

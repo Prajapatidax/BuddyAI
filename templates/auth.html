@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Login / Signup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+</head>
+<body class="auth-page">
+    <main class="auth-layout">
+        <section class="auth-card card reveal in-view">
+            <a class="auth-back" href="{{ url_for('index') }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Home
+            </a>
+            <h1 class="auth-title" id="auth-title">Welcome back</h1>
+            <p class="auth-subtitle" id="auth-subtitle">Log in to continue your BuddyAI study workspace.</p>
+
+            <div id="auth-alert" class="auth-alert" aria-live="polite"></div>
+
+            <form id="login-form" class="auth-form">
+                <div class="auth-field">
+                    <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"></path><path d="M4 7l8 6 8-6"></path><rect x="4" y="5" width="16" height="14" rx="2"></rect></svg>
+                    <input id="login-email" type="email" placeholder=" " required />
+                    <label for="login-email">Email Address</label>
+                </div>
+                <div class="auth-field">
+                    <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+                    <input id="login-password" type="password" placeholder=" " required />
+                    <label for="login-password">Password</label>
+                </div>
+                <button class="button button-primary" type="submit">Login to Workspace</button>
+            </form>
+
+            <form id="signup-form" class="auth-form hidden">
+                <div class="auth-field">
+                    <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M4 20a8 8 0 0 1 16 0"></path></svg>
+                    <input id="signup-username" type="text" placeholder=" " required />
+                    <label for="signup-username">Username</label>
+                </div>
+                <div class="auth-field">
+                    <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7l8 6 8-6"></path><rect x="4" y="5" width="16" height="14" rx="2"></rect></svg>
+                    <input id="signup-email" type="email" placeholder=" " required />
+                    <label for="signup-email">Email Address</label>
+                </div>
+                <div class="auth-field">
+                    <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+                    <input id="signup-password" type="password" placeholder=" " required />
+                    <label for="signup-password">Password (min 6 chars)</label>
+                </div>
+                <button class="button button-primary" type="submit">Create Account</button>
+            </form>
+
+            <p class="auth-switch" id="auth-switch-wrap">
+                New to BuddyAI?
+                <button id="switch-to-signup" type="button">Create an account</button>
+            </p>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

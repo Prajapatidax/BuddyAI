@@ -1,0 +1,162 @@
+.auth-page {
+    background: linear-gradient(135deg, var(--bg) 0%, #f0eee8 100%);
+}
+
+.auth-layout {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+}
+
+.auth-card {
+    width: min(440px, 100%);
+    padding: 40px 32px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-md);
+}
+
+.auth-back {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.auth-back:hover {
+    color: var(--text-primary);
+}
+
+.auth-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+.auth-subtitle {
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 15px;
+}
+
+.auth-alert {
+    margin-top: 20px;
+    min-height: 22px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 10px;
+    display: none;
+}
+
+.auth-alert:not(:empty) {
+    display: block;
+}
+
+.auth-alert.error {
+    background: #fdf2f2;
+    color: var(--danger);
+    border: 1px solid #f9dcdc;
+}
+
+.auth-alert.success {
+    background: #f2fdf5;
+    color: var(--success);
+    border: 1px solid #dcf9e3;
+}
+
+.auth-form {
+    margin-top: 24px;
+    display: grid;
+    gap: 16px;
+}
+
+.auth-field {
+    position: relative;
+}
+
+.auth-field input {
+    width: 100%;
+    height: 54px;
+    padding: 22px 16px 8px 48px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 15px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.auth-field input:hover {
+    border-color: #d1cfc7;
+}
+
+.auth-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+}
+
+.auth-field label {
+    position: absolute;
+    left: 48px;
+    top: 17px;
+    font-size: 15px;
+    color: #8a8881;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.auth-field input:focus + label,
+.auth-field input:not(:placeholder-shown) + label {
+    top: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+.field-icon {
+    position: absolute;
+    left: 16px;
+    top: 17px;
+    width: 20px;
+    height: 20px;
+    color: #a8a69e;
+    transition: color 0.2s ease;
+}
+
+.auth-field input:focus ~ .field-icon {
+    color: var(--accent);
+}
+
+.auth-form .button {
+    margin-top: 8px;
+    height: 50px;
+}
+
+.auth-switch {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.auth-switch button {
+    border: none;
+    background: transparent;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.2s ease;
+}
+
+.auth-switch button:hover {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}

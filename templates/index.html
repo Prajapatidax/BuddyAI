@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Smart Academic Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+</head>
+<body class="landing-page">
+    <header class="landing-header container reveal">
+        <div class="brand">BuddyAI</div>
+        <nav class="nav-links">
+            {% if is_logged_in %}
+                <a class="button button-secondary" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="button button-primary" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="button button-secondary" href="{{ url_for('auth_page') }}#login">Log In</a>
+                <a class="button button-primary" href="{{ url_for('auth_page') }}#signup">Start for Free</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div class="reveal">
+                <span class="badge">Smarter Learning Workspace</span>
+                <h1>Your Intelligent Academic Assistant</h1>
+                <p>
+                    BuddyAI helps students and researchers analyze documents, ask context-aware questions, and generate
+                    clear study notes in seconds. Upload your material and elevate your learning experience.
+                </p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="{{ url_for('auth_page') }}#signup">Get Started Now</a>
+                    <a class="button button-secondary" href="#features">Explore Platform</a>
+                </div>
+            </div>
+
+            <aside class="hero-card card reveal">
+                <h3>Built for Deep Focus</h3>
+                <div class="hero-metrics">
+                    <div class="metric-item">
+                        <strong>PDF & DOCX Ready</strong>
+                        <span>Flawless extraction and context understanding</span>
+                    </div>
+                    <div class="metric-item">
+                        <strong>Contextual AI Chat</strong>
+                        <span>Ask, revise, and simplify complex theories</span>
+                    </div>
+                    <div class="metric-item">
+                        <strong>Instant Notes</strong>
+                        <span>Generate structured points ready for revision</span>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section id="features" class="features">
+            <h2 class="reveal">Everything you need to learn faster</h2>
+            <div class="feature-grid">
+                <article class="feature-card reveal">
+                    <h3>AI Document Analysis</h3>
+                    <p>Securely upload PDF and DOCX files. Our engine extracts core concepts and instantly provides beautifully structured summaries.</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3>Smart Chat Assistant</h3>
+                    <p>Ask highly targeted questions based exactly on your document. Receive direct, cited explanations tuned for academic success.</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3>Automated Notes</h3>
+                    <p>Transform long-form text into revision-ready bullet points and study guides so you can focus entirely on understanding.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+</body>
+</html>
