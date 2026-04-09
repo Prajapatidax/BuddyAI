@@ -23,6 +23,7 @@ DB_PATH = os.getenv("SQLITE_PATH", os.path.join(os.path.dirname(os.path.abspath(
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 ALLOWED_EXTENSIONS = {"pdf", "docx"}
 MAX_DOCUMENT_CONTEXT_CHARS = 120_000
+VALID_ROLES = {"Student", "Faculty"}
 
 
 def env_bool(name, default=False):
@@ -78,6 +79,10 @@ def init_db():
         )
         """
     )
+    cursor.execute("PRAGMA table_info(users)")
+    columns = {row[1] for row in cursor.fetchall()}
+    if "role" not in columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'Student'")
     conn.commit()
     conn.close()
 
@@ -111,6 +116,11 @@ def login_required(route_func):
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def normalize_role(role):
+    normalized = (role or "Student").strip().title()
+    return normalized if normalized in VALID_ROLES else "Student"
 
 
 def extract_text_from_pdf(path):
@@ -175,53 +185,21 @@ def register_routes(app):
     def health():
         return jsonify({"status": "ok"}), 200
 
+    @app.route("/auth")
+    def auth_page():
+        return redirect(url_for("login_page"))
+
     @app.route("/")
     def index():
         return render_template("index.html", is_logged_in="user_id" in session)
 
-    @app.route("/auth")
-    def auth_page():
-        if "user_id" in session:
-            return redirect(url_for("dashboard"))
-        return render_template("auth.html")
+    @app.route("/login", methods=["GET", "POST"])
+    def login_page():
+        if request.method == "GET":
+            if "user_id" in session:
+                return redirect(url_for("dashboard"))
+            return render_template("login.html", default_role=normalize_role(request.args.get("role")))
 
-    @app.route("/dashboard")
-    def dashboard():
-        if "user_id" not in session:
-            return redirect(url_for("auth_page"))
-
-        user = {
-            "id": session.get("user_id"),
-            "username": session.get("username"),
-        }
-        return render_template("dashboard.html", user=user)
-
-    @app.route("/signup", methods=["POST"])
-    def signup():
-        payload = request.get_json(silent=True) or request.form
-        username = (payload.get("username") or "").strip()
-        email = (payload.get("email") or "").strip().lower()
-        password = payload.get("password") or ""
-
-        if not username or not email or not password:
-            return jsonify({"error": "All fields are required."}), 400
-
-        if len(password) < 6:
-            return jsonify({"error": "Password must be at least 6 characters."}), 400
-
-        password_hash = generate_password_hash(password)
-
-        try:
-            db_execute(
-                "INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)",
-                (username, email, password_hash, datetime.utcnow().isoformat()),
-            )
-            return jsonify({"message": "Signup successful. Please login."}), 201
-        except sqlite3.IntegrityError:
-            return jsonify({"error": "Username or email already exists."}), 409
-
-    @app.route("/login", methods=["POST"])
-    def login():
         payload = request.get_json(silent=True) or request.form
         email = (payload.get("email") or "").strip().lower()
         password = payload.get("password") or ""
@@ -232,14 +210,80 @@ def register_routes(app):
 
         session["user_id"] = user["id"]
         session["username"] = user["username"]
+        session["role"] = normalize_role(user["role"])
         session.setdefault("chat_session_id", str(uuid.uuid4()))
 
         return jsonify(
             {
                 "message": "Login successful.",
-                "user": {"id": user["id"], "username": user["username"], "email": user["email"]},
+                "user": {
+                    "id": user["id"],
+                    "username": user["username"],
+                    "email": user["email"],
+                    "role": session["role"],
+                },
             }
         )
+
+    @app.route("/signup", methods=["GET", "POST"])
+    def signup_page():
+        if request.method == "GET":
+            if "user_id" in session:
+                return redirect(url_for("dashboard"))
+            return render_template("signup.html", default_role=normalize_role(request.args.get("role")))
+
+        payload = request.get_json(silent=True) or request.form
+        username = (payload.get("username") or "").strip()
+        email = (payload.get("email") or "").strip().lower()
+        password = payload.get("password") or ""
+        role = normalize_role(payload.get("role"))
+
+        if not username or not email or not password:
+            return jsonify({"error": "All fields are required."}), 400
+
+        if len(password) < 6:
+            return jsonify({"error": "Password must be at least 6 characters."}), 400
+
+        if role not in VALID_ROLES:
+            return jsonify({"error": "Please choose either Student or Faculty."}), 400
+
+        password_hash = generate_password_hash(password)
+
+        try:
+            db_execute(
+                "INSERT INTO users (username, email, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?)",
+                (username, email, password_hash, role, datetime.utcnow().isoformat()),
+            )
+            return jsonify({"message": "Signup successful. Please login.", "role": role}), 201
+        except sqlite3.IntegrityError:
+            return jsonify({"error": "Username or email already exists."}), 409
+
+    @app.route("/dashboard")
+    def dashboard():
+        if "user_id" not in session:
+            return redirect(url_for("login_page"))
+
+        return redirect(url_for("chat_app"))
+
+    @app.route("/app")
+    def chat_app():
+        if "user_id" not in session:
+            return redirect(url_for("login_page"))
+
+        user = {
+            "id": session.get("user_id"),
+            "username": session.get("username"),
+            "role": normalize_role(session.get("role")),
+        }
+        return render_template("chat.html", user=user)
+
+    @app.route("/student-dashboard")
+    def student_dashboard():
+        return redirect(url_for("chat_app"))
+
+    @app.route("/faculty-dashboard")
+    def faculty_dashboard():
+        return redirect(url_for("chat_app"))
 
     @app.route("/logout")
     def logout():

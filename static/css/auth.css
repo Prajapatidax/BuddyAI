@@ -2,62 +2,136 @@
     background: var(--bg);
 }
 
-.auth-layout {
+.auth-shell {
     min-height: 100vh;
     display: grid;
     place-items: center;
-    padding: 24px 14px;
+    padding: 28px 0;
+}
+
+.auth-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.auth-visual,
+.auth-card {
+    padding: 24px;
+}
+
+.auth-visual {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+    min-height: 680px;
+    background: var(--surface-soft);
+}
+
+.auth-visual h1 {
+    font-size: clamp(2.5rem, 5vw, 4.8rem);
+    font-weight: 900;
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -0.06em;
+    max-width: 9ch;
+}
+
+.auth-visual p {
+    max-width: 54ch;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.visual-stack {
+    display: grid;
+    gap: 12px;
+}
+
+.visual-card {
+    padding: 16px;
+    border: 4px solid var(--border);
+    background: var(--white);
+    box-shadow: 5px 5px 0 0 var(--black);
+}
+
+.visual-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.visual-card span {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
 .auth-card {
-    width: min(500px, 100%);
-    padding: 26px;
+    display: grid;
+    align-content: start;
+    gap: 18px;
     background: var(--white);
 }
 
-.auth-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 18px;
-    padding: 7px 10px;
-    border: 2px solid var(--border);
-    background: var(--yellow);
-    border-radius: var(--radius-sm);
-    font-size: 0.86rem;
-    font-weight: 800;
-    box-shadow: 3px 3px 0 0 var(--black);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+.auth-head {
+    display: grid;
+    gap: 10px;
 }
 
-.auth-back:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 2px 2px 0 0 var(--black);
+.auth-head h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
 }
 
-.auth-title {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+.auth-head p {
+    max-width: 52ch;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.role-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.role-option {
+    min-height: 58px;
+    border: 4px solid var(--border);
+    background: var(--white);
+    box-shadow: 5px 5px 0 0 var(--black);
+    font-size: 0.92rem;
     font-weight: 900;
     text-transform: uppercase;
-    line-height: 1;
+    letter-spacing: 0.08em;
+    cursor: pointer;
 }
 
-.auth-subtitle {
-    margin-top: 10px;
-    font-size: 0.96rem;
-    color: var(--text-muted);
-    font-weight: 500;
+.role-option.is-active {
+    background: var(--red);
+    color: var(--white);
 }
 
 .auth-alert {
-    margin-top: 16px;
-    min-height: 18px;
-    padding: 10px 12px;
-    border: 3px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    min-height: 20px;
+    padding: 12px 14px;
+    border: 4px solid var(--border);
+    box-shadow: 4px 4px 0 0 var(--black);
+    font-size: 0.92rem;
     font-weight: 700;
     display: none;
+    background: var(--white);
 }
 
 .auth-alert:not(:empty) {
@@ -65,103 +139,59 @@
 }
 
 .auth-alert.error {
-    background: #ffd7d5;
-    color: var(--black);
+    background: var(--white);
 }
 
 .auth-alert.success {
-    background: #cdffda;
-    color: var(--black);
+    background: var(--white);
 }
 
 .auth-form {
-    margin-top: 18px;
     display: grid;
-    gap: 12px;
-}
-
-.auth-field {
-    position: relative;
-}
-
-.auth-field input {
-    width: 100%;
-    min-height: 56px;
-    padding: 24px 14px 10px 46px;
-    border: 3px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--white);
-    font-size: 0.96rem;
-    font-weight: 700;
-    color: var(--text);
-    box-shadow: 4px 4px 0 0 var(--black);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
-}
-
-.auth-field input:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 3px 3px 0 0 var(--black);
-}
-
-.auth-field input:focus {
-    outline: none;
-    border-color: var(--green);
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 0 var(--black);
-}
-
-.auth-field label {
-    position: absolute;
-    left: 46px;
-    top: 18px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #404040;
-    pointer-events: none;
-    transition: top 0.12s ease, font-size 0.12s ease, color 0.12s ease;
-}
-
-.auth-field input:focus + label,
-.auth-field input:not(:placeholder-shown) + label {
-    top: 8px;
-    font-size: 0.68rem;
-    color: var(--black);
-}
-
-.field-icon {
-    position: absolute;
-    left: 14px;
-    top: 18px;
-    width: 20px;
-    height: 20px;
-    color: var(--black);
-    pointer-events: none;
+    gap: 14px;
 }
 
 .auth-form .button {
-    margin-top: 8px;
     width: 100%;
 }
 
+.auth-submit {
+    min-height: 56px;
+}
+
 .auth-switch {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.94rem;
+    font-weight: 700;
     color: var(--text-muted);
 }
 
-.auth-switch button {
-    border: none;
-    border-bottom: 2px solid var(--border);
-    border-radius: 0;
-    background: transparent;
+.auth-switch a {
+    font-weight: 900;
     color: var(--black);
-    font-size: 0.92rem;
-    font-weight: 800;
-    cursor: pointer;
+    border-bottom: 3px solid var(--border);
 }
 
-.auth-switch button:hover {
-    color: var(--red);
+@media (max-width: 980px) {
+    .auth-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-visual {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .auth-shell {
+        padding: 16px 0 24px;
+    }
+
+    .auth-visual,
+    .auth-card {
+        padding: 18px;
+    }
+
+    .role-switch {
+        grid-template-columns: 1fr;
+    }
 }

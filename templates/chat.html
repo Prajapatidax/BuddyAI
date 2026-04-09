@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body class="dashboard-page" data-dashboard="student" data-user-id="{{ user.id }}" data-username="{{ user.username }}" data-role="{{ user.role }}">
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <div class="dashboard-shell chat-shell">
+        <aside class="sidebar chat-sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-mark"></span>
+                <div>
+                    <h1>BuddyAI</h1>
+                    <p>Your study partner</p>
+                </div>
+            </div>
+
+            <div class="sidebar-user card">
+                <span class="chip accent">Study session</span>
+                <h2>{{ user.username }}</h2>
+                <p>Ask questions, summarize notes, and prep for exams in one place.</p>
+            </div>
+
+            <div class="history-section chat-history-section">
+                <h3>Chat history</h3>
+                <div id="history-list" class="history-list"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="button button-primary" id="new-chat-btn" type="button">New Chat</button>
+                <a class="button button-secondary" href="{{ url_for('index') }}">Landing page</a>
+                <a class="button button-secondary" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-shell chat-main-shell">
+            <header class="topbar card">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Open sidebar">☰</button>
+                    <div>
+                        <span class="chip accent">BuddyAI</span>
+                        <h2>Ask. Learn. Understand.</h2>
+                        <p>Use the chat on the right and your saved sessions on the left.</p>
+                    </div>
+                </div>
+                <div class="topbar-actions">
+                    <div class="topbar-stat card">
+                        <strong>Fast</strong>
+                        <span>Answers</span>
+                    </div>
+                    <div class="topbar-stat card">
+                        <strong>Clear</strong>
+                        <span>Summaries</span>
+                    </div>
+                    <div class="topbar-stat card">
+                        <strong>Sharp</strong>
+                        <span>Exam prep</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="panel conversation-column reveal in-view chat-panel-slim">
+                <div class="panel-head">
+                    <span class="chip accent">AI assistant</span>
+                    <h3>Chat with BuddyAI</h3>
+                </div>
+
+                <div class="buddyai-toolbar">
+                    <label class="upload-zone upload-zone-inline" id="drop-zone" for="file-input">
+                        <strong>Upload PDF / DOCX</strong>
+                        <span>Drop a file here to anchor the conversation.</span>
+                    </label>
+                    <input id="file-input" type="file" accept=".pdf,.docx" hidden />
+                    <button id="upload-btn" class="button button-primary" type="button">Analyze file</button>
+                </div>
+                <div class="progress-track"><div id="upload-progress-fill" class="progress-fill"></div></div>
+                <p id="upload-status" class="muted">No file selected yet.</p>
+
+                <section id="summary-card" class="summary-card hidden">
+                    <h4>Document summary</h4>
+                    <p id="summary-text"></p>
+                </section>
+
+                <div id="chat-window" class="chat-window">
+                    <div id="welcome-screen" class="welcome-screen">
+                        <h3>Welcome to BuddyAI</h3>
+                        <p>Ask a question, upload notes, or start a fresh session from the sidebar.</p>
+                    </div>
+                </div>
+
+                <footer class="chat-composer">
+                    <div class="quick-actions">
+                        <button class="quick-btn" id="explain-simple" type="button">Explain simply</button>
+                        <button class="quick-btn" id="generate-notes" type="button">Generate notes</button>
+                    </div>
+                    <form id="chat-form">
+                        <div class="composer-row">
+                            <input id="chat-input" class="composer-input" type="text" placeholder="Ask BuddyAI anything..." autocomplete="off" required />
+                            <button class="button button-primary" id="send-btn" type="submit">Send</button>
+                        </div>
+                    </form>
+                    <p id="composer-tip" class="muted">Upload a file for context, or ask a general academic question right away.</p>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Student Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body class="dashboard-page" data-dashboard="student" data-user-id="{{ user.id }}" data-username="{{ user.username }}" data-role="{{ user.role }}">
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <div class="dashboard-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-mark"></span>
+                <div>
+                    <h1>BuddyAI</h1>
+                    <p>Student workspace</p>
+                </div>
+            </div>
+
+            <div class="sidebar-user card">
+                <span class="chip accent">Student</span>
+                <h2>{{ user.username }}</h2>
+                <p>Assignments, classwork, attendance, results, and BuddyAI in one place.</p>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Student navigation">
+                <button class="nav-link pressable is-active" type="button" data-view-target="overview">Overview</button>
+                <button class="nav-link pressable" type="button" data-view-target="assignments">Assignments</button>
+                <button class="nav-link pressable" type="button" data-view-target="classwork">Classwork</button>
+                <button class="nav-link pressable" type="button" data-view-target="attendance">Attendance</button>
+                <button class="nav-link pressable" type="button" data-view-target="results">Results</button>
+                <button class="nav-link pressable" type="button" data-view-target="buddyai">BuddyAI</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a class="button button-secondary" href="{{ url_for('index') }}">Landing page</a>
+                <a class="button button-primary" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-shell">
+            <header class="topbar card">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Open sidebar">☰</button>
+                    <div>
+                        <span class="chip accent">Student</span>
+                        <h2>Student dashboard</h2>
+                        <p>Move between academic workflows and open BuddyAI when you need help.</p>
+                    </div>
+                </div>
+                <div class="topbar-actions">
+                    <div class="topbar-stat card">
+                        <strong>84%</strong>
+                        <span>Attendance</span>
+                    </div>
+                    <div class="topbar-stat card">
+                        <strong>12</strong>
+                        <span>Active tasks</span>
+                    </div>
+                    <div class="topbar-stat card">
+                        <strong>91</strong>
+                        <span>Marks avg</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="view-stack">
+                <section class="dashboard-view is-active" data-view="overview">
+                    <div class="grid-four overview-grid">
+                        <article class="panel stat-panel reveal in-view">
+                            <span class="chip accent">Tasks</span>
+                            <strong>08 pending</strong>
+                            <p>Submission windows, revisions, and class updates.</p>
+                        </article>
+                        <article class="panel stat-panel reveal in-view">
+                            <span class="chip accent">Classwork</span>
+                            <strong>03 uploads</strong>
+                            <p>Lecture notes and materials available now.</p>
+                        </article>
+                        <article class="panel stat-panel reveal in-view">
+                            <span class="chip accent">Attendance</span>
+                            <strong>94%</strong>
+                            <p>Healthy presence across all enrolled subjects.</p>
+                        </article>
+                        <article class="panel stat-panel reveal in-view">
+                            <span class="chip accent">Results</span>
+                            <strong>A- average</strong>
+                            <p>Performance snapshot with room to push higher.</p>
+                        </article>
+                    </div>
+
+                    <div class="grid-two section-gap">
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip">Upcoming</span>
+                                <h3>Next deadlines</h3>
+                            </div>
+                            <div class="timeline-list">
+                                <div class="timeline-item"><strong>Database Assignment</strong><span>Due tomorrow</span></div>
+                                <div class="timeline-item"><strong>Research quiz</strong><span>Friday</span></div>
+                                <div class="timeline-item"><strong>Project reflection</strong><span>Next week</span></div>
+                            </div>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip">Progress</span>
+                                <h3>Weekly momentum</h3>
+                            </div>
+                            <div class="bar-list">
+                                <div class="bar-row"><span>Assignments</span><div class="bar"><i style="width: 72%"></i></div><strong>72%</strong></div>
+                                <div class="bar-row"><span>Classwork</span><div class="bar"><i style="width: 88%"></i></div><strong>88%</strong></div>
+                                <div class="bar-row"><span>Results</span><div class="bar"><i style="width: 79%"></i></div><strong>79%</strong></div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-view" data-view="assignments">
+                    <div class="grid-two section-gap">
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Assignments</span>
+                                <h3>Open submissions</h3>
+                            </div>
+                            <div class="table-wrap compact-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Task</th>
+                                            <th>Status</th>
+                                            <th>Due</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Database schema report</td><td>Open</td><td>Tomorrow</td></tr>
+                                        <tr><td>Research summary</td><td>Submitted</td><td>Today</td></tr>
+                                        <tr><td>Python quiz</td><td>Pending</td><td>Friday</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Submit</span>
+                                <h3>Assignment hand-in</h3>
+                            </div>
+                            <div class="stack">
+                                <div class="field">
+                                    <label for="assignment-note">Submission note</label>
+                                    <textarea id="assignment-note" rows="5" placeholder="Add a short note for your faculty member."></textarea>
+                                </div>
+                                <div class="field">
+                                    <label for="assignment-link">Optional link</label>
+                                    <input id="assignment-link" type="url" placeholder="https://drive.google.com/..." />
+                                </div>
+                                <button class="button button-primary" type="button">Mark as submitted</button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-view" data-view="classwork">
+                    <div class="grid-three section-gap">
+                        <article class="panel reveal in-view">
+                            <span class="chip">Download</span>
+                            <h3>Lecture notes</h3>
+                            <p class="muted">Week 1 to Week 4 material bundle.</p>
+                            <a class="button button-secondary" href="#">Download PDF</a>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <span class="chip">Download</span>
+                            <h3>Workshop files</h3>
+                            <p class="muted">Code samples, worksheets, and references.</p>
+                            <a class="button button-secondary" href="#">Get files</a>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <span class="chip">Download</span>
+                            <h3>Revision pack</h3>
+                            <p class="muted">High-density notes for fast exam prep.</p>
+                            <a class="button button-secondary" href="#">Open pack</a>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-view" data-view="attendance">
+                    <div class="grid-two section-gap">
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Attendance</span>
+                                <h3>Subject-wise status</h3>
+                            </div>
+                            <div class="table-wrap compact-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Present</th>
+                                            <th>Percent</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Database Systems</td><td>18 / 20</td><td>90%</td></tr>
+                                        <tr><td>Research Methods</td><td>19 / 20</td><td>95%</td></tr>
+                                        <tr><td>Software Engineering</td><td>17 / 20</td><td>85%</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Overview</span>
+                                <h3>Attendance at a glance</h3>
+                            </div>
+                            <div class="attendance-ring-grid">
+                                <div class="ring-card"><strong>90%</strong><span>Database</span></div>
+                                <div class="ring-card"><strong>95%</strong><span>Research</span></div>
+                                <div class="ring-card"><strong>85%</strong><span>Engineering</span></div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-view" data-view="results">
+                    <div class="grid-two section-gap">
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Results</span>
+                                <h3>Marks table</h3>
+                            </div>
+                            <div class="table-wrap compact-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Marks</th>
+                                            <th>Grade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Database Systems</td><td>88</td><td>A</td></tr>
+                                        <tr><td>Research Methods</td><td>91</td><td>A+</td></tr>
+                                        <tr><td>Software Engineering</td><td>84</td><td>A</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <article class="panel reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">Performance</span>
+                                <h3>Trend cards</h3>
+                            </div>
+                            <div class="stack">
+                                <div class="trend-card"><strong>Consistency</strong><span>Steady performance over the last three tests.</span></div>
+                                <div class="trend-card"><strong>Improvement</strong><span>Writing quality and structure are moving up.</span></div>
+                                <div class="trend-card"><strong>Risk area</strong><span>Late submissions still hurt the average.</span></div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-view" data-view="buddyai">
+                    <div class="chat-layout">
+                        <aside class="panel chat-history-column reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">BuddyAI</span>
+                                <h3>Chat history</h3>
+                            </div>
+                            <div id="history-list" class="history-list"></div>
+                            <a class="button button-secondary" href="{{ url_for('logout') }}">Clear session</a>
+                        </aside>
+
+                        <section class="panel conversation-column reveal in-view">
+                            <div class="panel-head">
+                                <span class="chip accent">AI assistant</span>
+                                <h3>Ask anything academic</h3>
+                            </div>
+
+                            <div class="buddyai-toolbar">
+                                <label class="upload-zone upload-zone-inline" id="drop-zone">
+                                    <strong>Upload PDF / DOCX</strong>
+                                    <span>Drop a file here to anchor the conversation.</span>
+                                </label>
+                                <input id="file-input" type="file" accept=".pdf,.docx" hidden />
+                                <button id="upload-btn" class="button button-primary" type="button">Analyze file</button>
+                            </div>
+                            <div class="progress-track"><div id="upload-progress-fill" class="progress-fill"></div></div>
+                            <p id="upload-status" class="muted">No file selected yet.</p>
+
+                            <section id="summary-card" class="summary-card hidden">
+                                <h4>Document summary</h4>
+                                <p id="summary-text"></p>
+                            </section>
+
+                            <div id="chat-window" class="chat-window">
+                                <div id="welcome-screen" class="welcome-screen">
+                                    <h3>Welcome to BuddyAI</h3>
+                                    <p>Use this split view to keep your history on the left and your active conversation on the right.</p>
+                                </div>
+                            </div>
+
+                            <footer class="chat-composer">
+                                <div class="quick-actions">
+                                    <button class="quick-btn" id="explain-simple" type="button">Explain simply</button>
+                                    <button class="quick-btn" id="generate-notes" type="button">Generate notes</button>
+                                </div>
+                                <form id="chat-form">
+                                    <div class="composer-row">
+                                        <input id="chat-input" class="composer-input" type="text" placeholder="Ask a question about your work..." autocomplete="off" required />
+                                        <button class="button button-primary" id="send-btn" type="submit">Send</button>
+                                    </div>
+                                </form>
+                                <p id="composer-tip" class="muted">Upload a file or ask a general academic question.</p>
+                            </footer>
+                        </section>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

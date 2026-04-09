@@ -3,80 +3,170 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BuddyAI | Smart Academic Assistant</title>
+    <title>BuddyAI | Your AI Study Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
 </head>
 <body class="landing-page">
-    <header class="landing-header container reveal">
-        <div class="brand">BuddyAI</div>
+    <header class="landing-header container">
+        <a class="brand" href="{{ url_for('index') }}">BuddyAI</a>
         <nav class="nav-links">
+            <a class="button button-ghost" href="#features">Features</a>
+            <a class="button button-ghost" href="#demo">Demo</a>
             {% if is_logged_in %}
-                <a class="button button-secondary" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="button button-secondary" href="{{ url_for('chat_app') }}">Open App</a>
                 <a class="button button-primary" href="{{ url_for('logout') }}">Logout</a>
             {% else %}
-                <a class="button button-secondary" href="{{ url_for('auth_page') }}#login">Log In</a>
-                <a class="button button-primary" href="{{ url_for('auth_page') }}#signup">Start for Free</a>
+                <a class="button button-secondary" href="{{ url_for('login_page') }}">Login</a>
+                <a class="button button-primary" href="{{ url_for('signup_page') }}">Get Started</a>
             {% endif %}
         </nav>
     </header>
 
-    <main class="container">
-        <section class="hero">
-            <div class="reveal">
-                <span class="badge">Smarter Learning Workspace</span>
-                <h1>Your Intelligent Academic Assistant</h1>
-                <p>
-                    BuddyAI helps students and researchers analyze documents, ask context-aware questions, and generate
-                    clear study notes in seconds. Upload your material and elevate your learning experience.
-                </p>
-                <div class="hero-actions">
-                    <a class="button button-primary" href="{{ url_for('auth_page') }}#signup">Get Started Now</a>
-                    <a class="button button-secondary" href="#features">Explore Platform</a>
+    <main>
+        <section class="hero-shell section-shell container">
+            <div class="hero-grid">
+                <div class="hero-copy reveal">
+                    <span class="badge accent">AI study companion</span>
+                    <h1>Your AI Study Partner</h1>
+                    <p>
+                        Ask. Learn. Understand. Instantly.
+                    </p>
+                    <div class="pill-row">
+                        <a class="button button-primary" href="{{ url_for('chat_app') }}">Start Chatting</a>
+                        <a class="button button-secondary" href="#features">See Features</a>
+                    </div>
+                    <div class="hero-loader" aria-hidden="true">
+                        <svg viewBox="0 0 160 40" role="presentation" focusable="false">
+                            <path d="M10 34V6M30 34V6M50 34V6M70 34V6M90 34V6M110 34V6M130 34V6M150 34V6" />
+                            <path d="M10 34H30M30 26H50M50 18H70M70 10H90M90 18H110M110 26H130M130 34H150" />
+                        </svg>
+                        <span>Loading study power</span>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-card reveal">
+                            <strong>Doubt Solving</strong>
+                            <span>Ask anything and get direct guidance.</span>
+                        </div>
+                        <div class="stat-card reveal">
+                            <strong>Summaries</strong>
+                            <span>Turn long notes into concise takeaways.</span>
+                        </div>
+                        <div class="stat-card reveal">
+                            <strong>Exam Prep</strong>
+                            <span>Revise with structured answers and hints.</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <aside class="hero-card card reveal">
-                <h3>Built for Deep Focus</h3>
-                <div class="hero-metrics">
-                    <div class="metric-item">
-                        <strong>PDF & DOCX Ready</strong>
-                        <span>Flawless extraction and context understanding</span>
+                <aside class="hero-stage card reveal" aria-label="Floating preview cards">
+                    <div class="floating-card floating-card-a" data-motion-card data-path="a">
+                        <span class="chip accent">Ask Anything</span>
+                        <h3>Question mode</h3>
+                        <p>Study problems, doubts, and explanations on demand.</p>
                     </div>
-                    <div class="metric-item">
-                        <strong>Contextual AI Chat</strong>
-                        <span>Ask, revise, and simplify complex theories</span>
+                    <div class="floating-card floating-card-b" data-motion-card data-path="b">
+                        <span class="chip">Get Answers</span>
+                        <h3>Instant response</h3>
+                        <p>Fast, structured answers for everyday study use.</p>
                     </div>
-                    <div class="metric-item">
-                        <strong>Instant Notes</strong>
-                        <span>Generate structured points ready for revision</span>
+                    <div class="floating-card floating-card-c" data-motion-card data-path="c">
+                        <span class="chip accent">Summarize Notes</span>
+                        <h3>Quick digest</h3>
+                        <p>Condense chapters, handouts, and reference notes.</p>
                     </div>
-                </div>
-            </aside>
+                </aside>
+            </div>
         </section>
 
-        <section id="features" class="features">
-            <h2 class="reveal">Everything you need to learn faster</h2>
+        <section class="motion-section section-shell">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="badge">Scroll motion</span>
+                    <h2 class="section-title">Cards move diagonally while the page breathes.</h2>
+                    <p class="section-copy">Feature cards glide across the viewport with eased transforms and subtle rotation.</p>
+                </div>
+            </div>
+            <div class="motion-lane" aria-hidden="true">
+                <div class="motion-card motion-card-a" data-motion-card data-path="diag-a">
+                    <strong>Ask Anything</strong>
+                </div>
+                <div class="motion-card motion-card-b" data-motion-card data-path="diag-b">
+                    <strong>Prepare for Exams</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="section-shell container">
+            <div class="section-head reveal">
+                <span class="badge accent">Core features</span>
+                <h2 class="section-title">Everything a student needs to understand faster.</h2>
+            </div>
             <div class="feature-grid">
                 <article class="feature-card reveal">
-                    <h3>AI Document Analysis</h3>
-                    <p>Securely upload PDF and DOCX files. Our engine extracts core concepts and instantly provides beautifully structured summaries.</p>
+                    <h3>AI Chat</h3>
+                    <p>Chat like you would with a sharp study partner, but faster and more organized.</p>
                 </article>
                 <article class="feature-card reveal">
-                    <h3>Smart Chat Assistant</h3>
-                    <p>Ask highly targeted questions based exactly on your document. Receive direct, cited explanations tuned for academic success.</p>
+                    <h3>Smart Summaries</h3>
+                    <p>Convert long notes into concise, exam-friendly points in seconds.</p>
                 </article>
                 <article class="feature-card reveal">
-                    <h3>Automated Notes</h3>
-                    <p>Transform long-form text into revision-ready bullet points and study guides so you can focus entirely on understanding.</p>
+                    <h3>Exam Prep</h3>
+                    <p>Get revision prompts, topic breakdowns, and structured preparation help.</p>
                 </article>
+                <article class="feature-card reveal">
+                    <h3>Assignment Help</h3>
+                    <p>Understand prompts, shape answers, and stay focused on what matters.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="demo" class="section-shell container">
+            <div class="demo-shell">
+                <div class="section-head reveal">
+                    <span class="badge accent">Demo preview</span>
+                    <h2 class="section-title">A rough, usable preview of the chat experience.</h2>
+                </div>
+                <div class="demo-grid">
+                    <article class="demo-card reveal">
+                        <div class="demo-window">
+                            <div class="demo-line demo-line-head"></div>
+                            <div class="demo-message user">Explain OSI model</div>
+                            <div class="demo-message ai demo-typing" data-typing-target="false">It has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, and Application.</div>
+                            <div class="demo-message user">Give me the short version.</div>
+                            <div class="demo-message ai">Think of it as a communication stack that moves data step by step.</div>
+                        </div>
+                    </article>
+                    <article class="demo-card reveal">
+                        <div class="demo-table">
+                            <div class="demo-row"><span>Prompt</span><span>Explain OSI model</span></div>
+                            <div class="demo-row"><span>Mode</span><span>Structured answer</span></div>
+                            <div class="demo-row"><span>Use case</span><span>Revision</span></div>
+                            <div class="demo-row"><span>Output</span><span>Clear and concise</span></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-shell container cta-shell">
+            <div class="cta-card reveal">
+                <span class="badge accent">Ready</span>
+                <h2 class="section-title">Stop Memorizing. Start Understanding.</h2>
+                <p class="section-copy">Open BuddyAI and turn study time into something clearer, faster, and more useful.</p>
+                <div class="pill-row">
+                    <a class="button button-primary" href="{{ url_for('chat_app') }}">Start Chatting</a>
+                    <a class="button button-secondary" href="{{ url_for('signup_page') }}">Create account</a>
+                </div>
             </div>
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

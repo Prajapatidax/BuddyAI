@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuddyAI | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+</head>
+<body class="auth-page" data-auth-mode="login">
+    <main class="auth-shell container">
+        <section class="auth-grid">
+            <aside class="auth-visual card reveal in-view">
+                <span class="badge accent">Welcome back</span>
+                <h1>Login to BuddyAI</h1>
+                <p>
+                    Jump into your AI study workspace for explanations, summaries, exam prep, and assignment help.
+                </p>
+                <div class="visual-stack">
+                    <div class="visual-card">
+                        <strong>Fast access</strong>
+                        <span>Pick up your last study session and continue instantly.</span>
+                    </div>
+                </div>
+                <a class="button button-secondary" href="{{ url_for('index') }}">Back to home</a>
+            </aside>
+
+            <section class="auth-card card reveal in-view">
+                <div class="auth-head">
+                    <span class="chip accent">Secure entry</span>
+                    <h2>Login</h2>
+                    <p>Sign in to your BuddyAI account.</p>
+                </div>
+
+                <div id="auth-alert" class="auth-alert" aria-live="polite"></div>
+
+                <form id="login-form" class="auth-form">
+                    <div class="field">
+                        <label for="login-email">Email</label>
+                        <input id="login-email" name="email" type="email" placeholder="student@school.edu" required />
+                    </div>
+                    <div class="field">
+                        <label for="login-password">Password</label>
+                        <input id="login-password" name="password" type="password" placeholder="••••••••" required />
+                    </div>
+                    <button class="button button-primary auth-submit" type="submit">Login</button>
+                </form>
+
+                <p class="auth-switch">
+                    New here?
+                    <a href="{{ url_for('signup_page') }}">Create an account</a>
+                </p>
+            </section>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>
