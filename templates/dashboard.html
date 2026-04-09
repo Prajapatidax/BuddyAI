@@ -6,7 +6,7 @@
     <title>BuddyAI | Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
 </head>
@@ -27,7 +27,7 @@
                     <small>Drag and drop or click to browse</small>
                 </label>
                 <input id="file-input" type="file" accept=".pdf,.docx" hidden />
-                <button id="upload-btn" class="button button-primary" type="button" style="width:100%; margin-top:12px;">Upload & Analyze</button>
+                <button id="upload-btn" class="button button-primary" type="button">Upload & Analyze</button>
                 <div class="progress-track" id="upload-progress-track">
                     <div class="progress-fill" id="upload-progress-fill"></div>
                 </div>
@@ -41,7 +41,7 @@
                 </div>
             </section>
 
-            <a class="button button-secondary" href="{{ url_for('logout') }}" style="width:100%;">Logout</a>
+            <a class="button button-secondary" href="{{ url_for('logout') }}">Logout</a>
         </aside>
 
         <main class="chat-panel">
@@ -95,7 +95,7 @@
                                     <p>Ask questions in chat to explore the content.</p>
                                 </div>
                             </div>
-                            <div class="step-card" style="grid-column: 1 / -1; align-items: center;">
+                            <div class="step-card step-card-wide">
                                 <span class="step-num">5</span>
                                 <div>
                                     <p>Get instant answers, smart summaries, and structured notes to study efficiently.</p>
